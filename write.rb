@@ -117,14 +117,10 @@ def assert(msg, a)
   exit 1
 end
 
-e = Experiment.new
-assert "true is true", true
-e.budget = 10
-assert "budget overrides", e.budget == 10
-e.budget = nil
-assert "budget resets", e.budget != nil && e.budget != 10
+experiment = Experiment.new
 
 story = Story.new
+
 assert "story in planning mode", story.planning?
 story.finish_planning
 assert "story ready to write", story.ready?
@@ -132,8 +128,6 @@ assert "story ready to write", story.ready?
 story.write_introduction
 assert "story has prose", story.prose && story.prose.length > 0
 assert "story ready to hook", story.can_propose_experiment? && story.hook?
-
-puts "\tIntroduction is:\n\n", story.formatted_prose
 
 prior_prose = story.formatted_prose
 story.propose_experiment
@@ -150,3 +144,5 @@ end
 story.accept_proposal if story.can_accept_proposal?
 story.reject_proposal if story.can_reject_proposal?
 story.write_conclusion
+
+puts "Final prose generated:\n#{story.prose}"
